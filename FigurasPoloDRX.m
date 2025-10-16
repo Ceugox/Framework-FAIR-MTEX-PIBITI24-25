@@ -20,3 +20,26 @@ Miller (2 ,0 ,0 , CS ) , ...
 Miller (2 ,2 ,0 , CS ) };
 %% Import the Data
 pf = loadPoleFigure ( fname ,h ,CS , SS , 'interface ','xrdml ');
+%% --- 1) Pole Figures Experimentais ---
+figure ;
+plot (pf ,'contourf ',' colorrange ','equal ','smooth ');
+mtexColorbar ;
+title ('Figuras de Polo Experimentais ( DRX ) ');
+%% --- 2) Calcular ODF a partir das PF ---
+odf = calcODF (pf , 'silent ');
+%% --- 3) Pole Figures Recalculadas ---
+figure ;
+plotPDF ( odf ,h , 'contourf','colorrange','equal','smooth');
+mtexColorbar ;
+title ('Figuras de Polo Recalculadas ( DRX )');
+%% --- 4) Seções da ODF ---
+figure ;
+plotSection ( odf , 'phi2 ' ,[0 45 65]* degree , 'contourf ',' colorrange ','
+equal ');
+mtexColorbar ;
+title ('ODF ( DRX )');
+%% --- 5) Inverse Pole Figure ( IPF ) ---
+figure ;
+plotIPDF ( odf ,[ xvector, yvector , zvector ], 'contourf ','colorrange','equal');
+mtexColorbar ;
+title ('IPF - DRX ');
