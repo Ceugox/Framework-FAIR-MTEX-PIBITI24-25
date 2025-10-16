@@ -1,0 +1,29 @@
+%% Seleção das fases
+% Nomes exatos das fases , conforme definidos na importação
+phaseNames = { 'Austenite , fcc ( New )','Iron'};
+% Planos cristalogr á ficos tí picos para cubic m -3m
+% (100) , (110) e (111)
+for i = 1: numel ( phaseNames )
+% Seleciona apenas a fase atual
+phaseEBSD = ebsd ( phaseNames {i }) ;
+% Se não houver orienta ções indexadas , pula
+if isempty ( phaseEBSD . orientations )
+fprintf ('Nenhuma orienta çã o encontrada para a fase % s\n ',
+phaseNames {i }) ;
+continue
+end
+% Orienta ções e simetria cristalina
+ori = phaseEBSD . orientations ;
+CS = phaseEBSD . CS ;
+% Define os planos para pole figure
+h = [ Miller (1 ,0 ,0 , CS ) , Miller (1 ,1 ,0 , CS ) , Miller (1 ,1 ,1 , CS ) ];
+% Calcula ODF a partir das orienta ções
+odf = calcDensity ( ori , 'halfwidth ' ,10* degree );
+% Calcula figura de polo
+pf = calcPoleFigure ( odf , h) ;
+% Plota figura de polo
+figure ;
+plot ( pf );
+title ([ 'Figuras de Polo - Fase : ' phaseNames {i }]) ;
+mtexColorbar ;
+end
